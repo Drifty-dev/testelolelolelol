@@ -76,6 +76,29 @@
     <script src="https://kit.fontawesome.com/44623006da.js" crossorigin="anonymous"></script>
     <script src="../js/bootstrap.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    
+    
+    <script>
+        function toggle() {
+            var type = document.getElementById("type").value;
+            var sname = document.getElementById("sname");
+            var sicon = document.getElementById("sicon");
+            var scolor = document.getElementById("scolor");
+
+            if (type === "quadhook") {
+                sname.style.display = "block";
+                sicon.style.display = "block";
+                scolor.style.display = "block";
+            } else {
+                sname.style.display = "none";
+                sicon.style.display = "none";
+                scolor.style.display = "none";
+            }
+        }
+
+        window.onload = toggle;
+    </script>
+
     <script>
         /* ---- particles.js config ---- */
         particlesJS("particles-js", {
