@@ -1,28 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        body, html { background: rgb(24, 24, 28) !important; }
-        .background { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
-    </style>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create</title>
     <!-- CSS / Bootstrap -->
-    <link href="/controlpage/css/imports.css?v=1742160749" rel="stylesheet">
-    <link href="/controlpage/css/config.css?v=1742160749&name=controlPage" rel="stylesheet">
-    <!-- SNACKBAR -->
+    <link href="/Controlpage/css/imports.css?v=1742160749" rel="stylesheet">
+    <link href="/Controlpage/css/config.css?v=1742160749&name=Controlpage" rel="stylesheet">
     <link rel="stylesheet" href="/controlPage/css/snackbar.css" />
-    <script src="/controlpage/js/snackbar.js"></script>
+    <link rel="stylesheet" href="particles.css"> <!-- Llamada al CSS de partículas -->
+    <script src="/Controlpage/js/snackbar.js"></script>
     <style>
         .swal2-container { z-index: 20000 !important; }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.3/particles.min.js"></script>
 </head>
 
 <body>
-    <div class="background"></div> <!-- Contenedor para las partículas -->
+    <div id="particles-js"></div> <!-- Contenedor para las partículas -->
     
     <section id="login" name="regular" class="form">
         <div class="container h-100">
@@ -64,7 +59,7 @@
                         <!-- ~LOGIN FORM -->
                     </div>
                     <center>
-                        <button type="button" class="button primary d-block mt-3 w-80" onclick="window.location.replace('/control page/hyper-link');" style="color:black">
+                        <button type="button" class="button primary d-block mt-3 w-80" onclick ="window.location.replace('/Controlpage/hyper-link');" style="color:black">
                             <i class="fa-solid fa-repeat" style="color:black"></i> Hyperlink (LinkHider) Generator
                         </button>
                     </center>
@@ -76,64 +71,142 @@
         <div class="overlay-bottom-left"></div>
     </section>
 
-    <script src="../apis/main.js?v=1742160749"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="https://kit.fontawesome.com/44623006da.js" crossorigin="anonymous"></script>
     <script src="../js/bootstrap.js"></script>
-    <script src="../js/core.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        function toggle() {
-            var type = document.getElementById("type").value;
-            var sname = document.getElementById("sname");
-            var sicon = document.getElementById("sicon");
-            var scolor = document.getElementById("scolor");
-
-            if (type === "quadhook") {
-                sname.style.display = "block";
-                sicon.style.display = "block";
-                scolor.style.display = "block";
-            } else {
-                sname.style.display = "none";
-                sicon.style.display = "none";
-                scolor.style.display = "none";
-            }
-        }
-
-        window.onload = function() {
-            toggle();
-            // Inicializa las partículas de fondo
-            try {
-                Particles.init({
-                    selector: '.background',
-                    maxParticles: 100,
-                    connectParticles: true,
-                    speed: 2,
-                    minDistance: 100,
-                    sizeVariations: 3,
-                    color: '#ffffff',
-                    responsive: [
-                        {
-                            breakpoint: 768,
-                            options: {
-                                maxParticles: 50,
-                                connectParticles: false
-                            }
-                        },
-                        {
-                            breakpoint: 480,
-                            options: {
-                                maxParticles: 30,
-                                connectParticles: false
-                            }
+        /* ---- particles.js config ---- */
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 100,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    },
+                    "image": {
+                        "src": "img/github.svg",
+                        "width": 100,
+                        "height": 100
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 1
                         }
-                    ]
-                });
-            } catch (error) {
-                console.error("Error initializing particles:", error);
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
+        /* ---- stats.js config ---- */
+        var count_particles, stats, update;
+        stats = new Stats;
+        stats.setMode(0);
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.top = '0px';
+        document.body.appendChild(stats.domElement);
+        count_particles = document.querySelector('.js-count-particles');
+        update = function() {
+            stats.begin();
+            stats.end();
+            if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
+                count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
             }
+            requestAnimationFrame(update);
         };
+        requestAnimationFrame(update);
     </script>
 </body>
 </html>
