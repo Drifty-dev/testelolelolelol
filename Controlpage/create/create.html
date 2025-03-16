@@ -5,6 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autohar Directory Generator</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+        /* Text Overlay */
+        .text-overlay {
+            position: absolute; 
+            top: 15%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            font-size: 20px; 
+            color: white; 
+            text-align: center; 
+            z-index: 2; 
+            animation: fadeIn 2s; 
+        }
+
+        /* Input Container */
+        .input-container { 
+            position: absolute; 
+            top: 40%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            z-index: 2; 
+            color: white; 
+            text-align: center; 
+        }
+
+        /* Input Field */
+        #directoryInput, #webhookInput {
+            width: 300px; 
+            padding: 10px; 
+            border: 1px solid #ffffff; 
+            border-radius: 5px; 
+            background: rgba(255, 255, 255, 0.1); 
+            color: white; 
+            font-size: 18px; 
+            transition: border-color 0.3s; 
+        }
+
+        /* Button Styles */
+        #generateButton { 
+            padding: 10px 15px; 
+            border: none; 
+            border-radius: 5px; 
+            background-color: #04AA6D; /* Color verde */
+            color: white; 
+            font-size: 18px; 
+            cursor: pointer; 
+            margin-left: 10px; /* Espacio entre el input y el botón */
+            transition: background-color 0.3s; 
+        }
+
+        #generateButton:hover { 
+            background-color: #038a4d; /* Color más oscuro al pasar el mouse */
+        }
+    </style>
 </head>
 <body>
     <div class="navigation">
@@ -33,11 +87,13 @@
 
         <button id="generateButton">Generate</button>
     </div>
+
     <img src="folder-icon.png" alt="Folder Icon" class="folder-icon">
     <canvas class="background"></canvas>
 
     <div id="copyMessage" class="copy-message" style="display: none;">Copied!</div>
 
+    <!-- Required script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.3/particles.min.js"></script>
     <script type="text/javascript" src="script.js"></script>
 </body>
